@@ -1,0 +1,10 @@
+@import 'mixins';
+@import 'vars';
+@import '../../app/components/MyComponent/MyComponent';
+
+.project-type {
+  &__title {
+    margin-bottom: 28px;
+    margin-top: 54px;
+  }
+}

@@ -1,0 +1,13 @@
+@import 'vars';
+
+body {
+  font-family: sans-serif;
+}
+
+.critical-class {
+  color: $color-red;
+}
+
+.cat {
+  transition: border-radius 1s ease-in-out;
+}
