@@ -1576,7 +1576,7 @@ module.exports = plugin;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var template = "\n  <header class=\"header\">\n    <div class=\"container\">\n      <h1 class=\"header__title\">News</h1>\n\n\n\n      <ul class=\"header-chanels\">\n        <li class=\"header-chanels__item\">\n          <div @click=\"showChanelsControl\" class=\"header__add\"></div>\n          <div v-show=\"openControl\" class=\"chanels-control\">\n            <ul class=\"chanels-list\">\n              <li v-for=\"source in sources\" class=\"chanels-list__item\">\n                <h3 v-text=\"source.name\" class=\"chanel-list__title\"></h3>\n                <p v-text=\"source.category\" class=\"chanel-list__category\"></p>\n                <div v-if=\"inBasicChanels(source.id)\"\n                  @click=\"removeChanel(source.id)\"\n                  class=\"chanels-control__remove\"></div>\n                <div v-else\n                  @click=\"addChanel(source.id)\"\n                  class=\"chanels-control__add\"></div>\n\n              </li>\n            </ul>\n          </div>\n        </li>\n        <li v-for=\"chanel in baseChanels\" class=\"header-chanels__item\">\n          <button @click=\"showChanel(chanel.key)\" class=\"header-chanels__button\">{{chanel.name}}</button>\n        </li>\n      </ul>\n    </div>\n  </header>\n";
+var template = "\n  <header class=\"header\">\n    <div class=\"container\">\n      <h1 class=\"header__title\">News</h1>\n\n      <ul class=\"header-chanels\">\n        <li class=\"header-chanels__item\">\n          <div @click=\"showChanelsControl\" class=\"header__add\"></div>\n          <div v-show=\"openControl\" class=\"chanels-control\">\n            <div class=\"chanels-control__content\">\n              <input v-model=\"search\" ref='search' class=\"chanels-control__search\" type=\"text\" placeholder=\"search\">\n              <ul class=\"chanels-list\">\n                <li v-for=\"source in localSources\" @click=\"toggleChanel(source.id)\" class=\"chanels-list__item\">\n                  <h3 v-text=\"source.name\" class=\"chanels-list__title\"></h3>\n                  <p v-text=\"source.category\" class=\"chanels-list__category\"></p>\n                  <div v-if=\"inBasicChanels(source.id)\"\n                    class=\"chanels-control__remove\"></div>\n                  <div v-else\n                    class=\"chanels-control__add\"></div>\n                </li>\n              </ul>\n            </div>\n          </div>\n        </li>\n        <li v-for=\"chanel in baseChanels\" class=\"header-chanels__item\">\n          <button @click=\"showChanel($event, chanel.key)\" class=\"header-chanels__button\">{{chanel.name}}</button>\n        </li>\n      </ul>\n    </div>\n  </header>\n";
 
 exports.default = template;
 
@@ -1618,21 +1618,36 @@ Vue.component('header-cmp', {
     return {
       sources: [],
       openControl: false,
-      baseChanels: baseChanels
+      baseChanels: baseChanels,
+      search: ''
     };
   },
   methods: {
-    showChanel: function showChanel(chanel) {
+    showChanel: function showChanel($event, chanel) {
       _mediator2.default.$emit('chanelSelected', chanel);
+      document.querySelector('.header-chanels__button_active').classList.remove('header-chanels__button_active');
+      $event.target.classList.add('header-chanels__button_active');
     },
     showChanelsControl: function showChanelsControl() {
+      var vm = this;
       this.openControl = !this.openControl;
       body.classList.toggle('no-scroll');
+      setTimeout(function () {
+        vm.$refs.search.focus();
+      }, 0);
     },
     inBasicChanels: function inBasicChanels(chanel) {
       return this.baseChanels.some(function (baseChanel) {
         return baseChanel.key === chanel;
       });
+    },
+    toggleChanel: function toggleChanel(chanel) {
+      var inBasics = this.inBasicChanels(chanel);
+      if (inBasics) {
+        this.removeChanel(chanel);
+      } else {
+        this.addChanel(chanel);
+      }
     },
     addChanel: function addChanel(chanel) {
       var newChanel = {
@@ -1657,6 +1672,19 @@ Vue.component('header-cmp', {
       localStorage.setItem('baseChanels', JSON.stringify(newBaseChanels));
     }
   },
+  computed: {
+    localSources: function localSources() {
+      if (!this.search.length) {
+        return this.sources;
+      } else {
+        var search = this.search.toLowerCase();
+        return this.sources.filter(function (source) {
+          var name = source.name.toLowerCase();
+          return name.indexOf(search) !== -1;
+        });
+      }
+    }
+  },
   mounted: function mounted() {
     var _this2 = this;
 
@@ -1665,6 +1693,7 @@ Vue.component('header-cmp', {
     });
 
     _mediator2.default.$emit('showFirstChanel', this.baseChanels[0].key);
+    document.querySelector('.header-chanels__button').classList.add('header-chanels__button_active');
   }
 });
 
@@ -1771,7 +1800,6 @@ var api = {
     return Vue.http.get(urls.sources);
   },
   getNews: function getNews(chanel) {
-    console.log('get ', chanel);
     return Vue.http.get(getUrlForChanel(chanel));
   }
 };

@@ -18,7 +18,6 @@ let api = {
     return Vue.http.get(urls.sources);
   },
   getNews(chanel) {
-    console.log('get ', chanel);
     return Vue.http.get(getUrlForChanel(chanel));
   }
 }

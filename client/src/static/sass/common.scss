@@ -5,6 +5,10 @@ $color-preloader-bg: #f7f7f7;
 $color-preloader-border: #333;
 $color-preloader-gap: #999;
 
+*:focus {
+  outline: none;
+}
+
 body {
   background: $body-bg;
   font-family: 'Hind', sans-serif;
@@ -13,7 +17,7 @@ body {
   padding-top: $header-height;
 }
 
-h1 {
+h1, h3 {
   margin: 0;
 }
 
@@ -111,4 +115,9 @@ ul {
 .no-scroll {
   height: 100vh;
   overflow: hidden;
+
+  .news {
+    filter: blur(10px);
+    z-index: 1;
+  }
 }

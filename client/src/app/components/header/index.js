@@ -24,21 +24,38 @@ Vue.component('header-cmp', {
     return {
       sources: [],
       openControl: false,
-      baseChanels: baseChanels
+      baseChanels: baseChanels,
+      search: ''
     }
   },
   methods: {
-    showChanel: function(chanel) {
+    showChanel: function($event, chanel) {
       mediator.$emit('chanelSelected', chanel);
+      document.querySelector('.header-chanels__button_active')
+        .classList.remove('header-chanels__button_active');
+      $event.target.classList.add('header-chanels__button_active');
     },
     showChanelsControl: function() {
+      let vm = this;
       this.openControl = !this.openControl;
       body.classList.toggle('no-scroll');
+      setTimeout(function() {
+        vm.$refs.search.focus();
+      }, 0);
+
     },
     inBasicChanels: function(chanel) {
       return this.baseChanels.some((baseChanel) => {
         return baseChanel.key === chanel;
       });
+    },
+    toggleChanel: function(chanel) {
+      let inBasics = this.inBasicChanels(chanel);
+      if (inBasics) {
+        this.removeChanel(chanel);
+      } else {
+        this.addChanel(chanel);
+      }
     },
     addChanel: function(chanel) {
       let newChanel = {
@@ -61,11 +78,26 @@ Vue.component('header-cmp', {
       localStorage.setItem('baseChanels', JSON.stringify(newBaseChanels));
     }
   },
+  computed: {
+    localSources: function() {
+      if (!this.search.length) {
+        return this.sources;
+      } else {
+        let search = this.search.toLowerCase();
+        return this.sources.filter((source) => {
+          let name = source.name.toLowerCase();
+          return name.indexOf(search) !== -1;
+        });
+      }
+    }
+  },
   mounted: function() {
     api.getSources().then((data) => {
       this.sources = data.body.sources;
     });
 
     mediator.$emit('showFirstChanel', this.baseChanels[0].key);
+    document.querySelector('.header-chanels__button')
+      .classList.add('header-chanels__button_active');
   }
 })

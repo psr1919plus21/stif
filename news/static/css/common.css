@@ -1,3 +1,6 @@
+*:focus {
+  outline: none; }
+
 body {
   background: #fcfcfc;
   font-family: 'Hind', sans-serif;
@@ -5,7 +8,7 @@ body {
   margin: 0;
   padding-top: 35px; }
 
-h1 {
+h1, h3 {
   margin: 0; }
 
 ul {
@@ -76,3 +79,6 @@ ul {
 .no-scroll {
   height: 100vh;
   overflow: hidden; }
+  .no-scroll .news {
+    filter: blur(10px);
+    z-index: 1; }

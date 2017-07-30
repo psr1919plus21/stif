@@ -1,12 +1,14 @@
+$color-chanel-hover: #fff8ff;;
+
 .header {
   background: $color-white;
   border-bottom: 1px solid $border-color;
   box-shadow: 0 1px 8px 0 #ebebeb;
   left: 0;
-  // min-height: $header-height;
   position: fixed;
   right: 0;
   top: 0;
+  z-index: 2;
 
   &__title {
     font-size: 22px;
@@ -57,6 +59,12 @@
       color: $color-white;
     }
   }
+
+  &__button_active {
+    background: $color-light-blue;
+    border-color: $color-grey;
+    color: $color-white;
+  }
 }
 
 .chanels-control {
@@ -69,6 +77,25 @@
   top: 36px;
   width: 100vw;
   z-index: 1;
+
+  &__content {
+    background: $color-white;
+    height: 90vh;
+    margin: 2vh auto auto;
+    padding-top: 32px;
+    width: 60vw;
+  }
+
+  &__search {
+    border: 1px solid $border-color;
+    border-radius: 4px;
+    box-sizing: border-box;
+    display: block;
+    font-size: 22px;
+    margin: 0 auto 10px;
+    padding: 10px;
+    width: 80%;
+  }
 
   &__remove {
     background: url('/news/static/img/remove.svg') no-repeat center;
@@ -98,10 +125,29 @@
 }
 
 .chanels-list {
-  background: $color-white;
-  height: 90vh;
-  margin: 2vh auto auto;
+  align-content: flex-start;
+  display: flex;
+  flex-wrap: wrap;
+  height: calc(90vh - 32px);
+  justify-content: space-between;
   overflow-y: auto;
   padding: 16px;
-  width: 60vw;
+
+
+  &__item {
+    border-bottom: 1px solid $border-color;
+    cursor: pointer;
+    margin-bottom: 28px;
+    max-height: 100px;
+    padding: 11px 4px;
+    width: 48%;
+
+    &:hover {
+      background: $color-chanel-hover;
+    }
+  }
+
+  &__category {
+    margin: 0;
+  }
 }
