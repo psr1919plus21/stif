@@ -139,6 +139,7 @@ $color-chanel-hover: #fff8ff;;
 }
 
 .chanels-list {
+  -webkit-overflow-scrolling: touch;
   align-content: flex-start;
   display: flex;
   flex-wrap: wrap;
