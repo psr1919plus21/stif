@@ -1576,7 +1576,7 @@ module.exports = plugin;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var template = "\n  <header class=\"header\">\n    <div class=\"container\">\n      <h1 class=\"header__title\">News</h1>\n\n      <ul class=\"header-chanels\">\n        <li v-for=\"chanel in baseChanels\" class=\"header-chanels__item\">\n          <button @click=\"showChanel(chanel.key)\" class=\"header-chanels__button\">{{chanel.name}}</button>\n        </li>\n      </ul>\n    </div>\n  </header>\n";
+var template = "\n  <header class=\"header\">\n    <div class=\"container\">\n      <h1 class=\"header__title\">News</h1>\n\n\n\n      <ul class=\"header-chanels\">\n        <li class=\"header-chanels__item\">\n          <div @click=\"showChanelsControl\" class=\"header__add\"></div>\n          <div v-show=\"openControl\" class=\"chanels-control\">\n            <ul class=\"chanels-list\">\n              <li v-for=\"source in sources\" class=\"chanels-list__item\">\n                <h3 v-text=\"source.name\" class=\"chanel-list__title\"></h3>\n                <p v-text=\"source.category\" class=\"chanel-list__category\"></p>\n                <div v-if=\"inBasicChanels(source.id)\"\n                  @click=\"removeChanel(source.id)\"\n                  class=\"chanels-control__remove\"></div>\n                <div v-else\n                  @click=\"addChanel(source.id)\"\n                  class=\"chanels-control__add\"></div>\n\n              </li>\n            </ul>\n          </div>\n        </li>\n        <li v-for=\"chanel in baseChanels\" class=\"header-chanels__item\">\n          <button @click=\"showChanel(chanel.key)\" class=\"header-chanels__button\">{{chanel.name}}</button>\n        </li>\n      </ul>\n    </div>\n  </header>\n";
 
 exports.default = template;
 
@@ -1597,36 +1597,74 @@ var _headerTpl2 = _interopRequireDefault(_headerTpl);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+var body = document.querySelector('body'); /* global Vue */
+
+var baseChanels = [{
+  key: 'google-news',
+  name: 'google'
+}, {
+  key: 'bbc-news',
+  name: 'bbc'
+}, {
+  key: 'cnn',
+  name: 'cnn'
+}];
+
+baseChanels = JSON.parse(localStorage.getItem('baseChanels')) || baseChanels;
+
 Vue.component('header-cmp', {
   template: _headerTpl2.default,
   data: function data() {
     return {
       sources: [],
-      baseChanels: [{
-        key: 'google',
-        name: 'google'
-      }, {
-        key: 'bbc',
-        name: 'bbc'
-      }, {
-        key: 'cnn',
-        name: 'cnn'
-      }]
+      openControl: false,
+      baseChanels: baseChanels
     };
   },
   methods: {
     showChanel: function showChanel(chanel) {
       _mediator2.default.$emit('chanelSelected', chanel);
+    },
+    showChanelsControl: function showChanelsControl() {
+      this.openControl = !this.openControl;
+      body.classList.toggle('no-scroll');
+    },
+    inBasicChanels: function inBasicChanels(chanel) {
+      return this.baseChanels.some(function (baseChanel) {
+        return baseChanel.key === chanel;
+      });
+    },
+    addChanel: function addChanel(chanel) {
+      var newChanel = {
+        key: chanel,
+        name: chanel
+      };
+      this.baseChanels.push(newChanel);
+    },
+    removeChanel: function removeChanel(chanel) {
+      var _this = this;
+
+      this.baseChanels.some(function (baseChanel, index) {
+        if (baseChanel.key === chanel) {
+          _this.baseChanels.splice(index, 1);
+          return true;
+        }
+      });
+    }
+  },
+  watch: {
+    baseChanels: function baseChanels(newBaseChanels) {
+      localStorage.setItem('baseChanels', JSON.stringify(newBaseChanels));
     }
   },
   mounted: function mounted() {
-    var _this = this;
+    var _this2 = this;
 
     _api2.default.getSources().then(function (data) {
-      _this.sources = data.body.sources;
+      _this2.sources = data.body.sources;
     });
   }
-}); /* global Vue */
+});
 
 },{"../../services/api":8,"../../services/mediator":9,"./headerTpl":3}],5:[function(require,module,exports){
 'use strict';
@@ -1645,6 +1683,8 @@ var _newsFeedTpl2 = _interopRequireDefault(_newsFeedTpl);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+var body = document.querySelector('body'); /* global Vue */
+
 Vue.component('news-feed', {
   template: _newsFeedTpl2.default,
   data: function data() {
@@ -1652,18 +1692,15 @@ Vue.component('news-feed', {
       articles: []
     };
   },
-  methods: {
-    loadNews: function loadNews() {
-      _api2.default.getSources().then(function (data) {
-        console.log(data);
-      });
-    }
-  },
+  methods: {},
   created: function created() {
     var _this = this;
 
     _mediator2.default.$on('chanelSelected', function (chanel) {
+      _this.articles = [];
+      body.classList.add('vue-app-preload');
       _api2.default.getNews(chanel).then(function (data) {
+        body.classList.remove('vue-app-preload');
         _this.articles = data.body.articles;
       });
     });
@@ -1671,11 +1708,11 @@ Vue.component('news-feed', {
   mounted: function mounted() {
     var _this2 = this;
 
-    _api2.default.getNews('google').then(function (data) {
+    _api2.default.getNews('google-news').then(function (data) {
       _this2.articles = data.body.articles;
     });
   }
-}); /* global Vue */
+});
 
 },{"../../services/api":8,"../../services/mediator":9,"./newsFeedTpl":6}],6:[function(require,module,exports){
 "use strict";
@@ -1683,7 +1720,7 @@ Vue.component('news-feed', {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var template = "\n  <div class=\"news\">\n    <ul class=\"news-list\">\n      <li v-for=\"article in articles\" class=\"news-list__item\">\n        <a :href=\"article.url\" target=\"_blank\" class=\"news-list__link-title\">\n          <h2 v-text=\"article.title\" class=\"news-list__title\"></h2>\n        </a>\n        <a :href=\"article.url\" target=\"_blank\" class=\"news-list__link\">\n          <img :src=\"article.urlToImage\" class=\"news-list__img\">\n        </a>\n        <p v-text=\"article.description\" class=\"news-list__description\"></p>\n      </li>\n    </ul>\n  </div>\n";
+var template = "\n  <div class=\"news\">\n    <ul class=\"news-list\">\n      <li  v-for=\"article in articles\" class=\"news-list__item\">\n        <a :href=\"article.url\" target=\"_blank\" class=\"news-list__link-title\">\n          <h2 v-text=\"article.title\" class=\"news-list__title\"></h2>\n        </a>\n        <a :href=\"article.url\" target=\"_blank\" class=\"news-list__link\">\n          <img :src=\"article.urlToImage\" class=\"news-list__img\">\n        </a>\n        <p v-text=\"article.description\" class=\"news-list__description\"></p>\n      </li>\n    </ul>\n  </div>\n";
 
 exports.default = template;
 
@@ -1722,11 +1759,12 @@ Vue.use(_vueResource2.default); /* global Vue */
 
 var API_KEY = '956918925cff4bbf971eb06f42e34b20';
 var urls = {
-  google: 'https://newsapi.org/v1/articles?source=google-news&apiKey=' + API_KEY,
-  bbc: 'https://newsapi.org/v1/articles?source=bbc-news&apiKey=' + API_KEY,
-  cnn: 'https://newsapi.org/v1/articles?source=cnn&apiKey=' + API_KEY,
   sources: 'https://newsapi.org/v1/sources?language=en'
 };
+
+function getUrlForChanel(chanel) {
+  return 'https://newsapi.org/v1/articles?source=' + chanel + '&apiKey=' + API_KEY;
+}
 
 var api = {
   getSources: function getSources() {
@@ -1734,18 +1772,9 @@ var api = {
   },
   getNews: function getNews(chanel) {
     console.log('get ', chanel);
-    return Vue.http.get(urls[chanel]);
+    return Vue.http.get(getUrlForChanel(chanel));
   }
 };
-
-// this.$http.get('/someUrl').then(response => {
-//
-//     // get body data
-//     this.someData = response.body;
-//
-//   }, response => {
-//     // error callback
-//   });
 
 exports.default = api;
 

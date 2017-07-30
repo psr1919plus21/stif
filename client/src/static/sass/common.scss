@@ -25,7 +25,8 @@ ul {
 
 .container {
   margin: 0 auto;
-  max-width: 1440px;
+  max-width: 1200px;
+  padding: 0 16px;
 }
 
 .project-type__img {
@@ -65,7 +66,7 @@ ul {
   background: $color-preloader-bg;
   border-radius: 8px;
   color: transparent;
-  height: 300px;
+  height: 100vh;
   position: relative;
   width: 100%;
 
@@ -105,4 +106,9 @@ ul {
   to {
     transform: rotate(360deg);
   }
+}
+
+.no-scroll {
+  height: 100vh;
+  overflow: hidden;
 }

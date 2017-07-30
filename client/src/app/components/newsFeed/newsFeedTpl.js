@@ -1,7 +1,7 @@
 let template = `
   <div class="news">
     <ul class="news-list">
-      <li v-for="article in articles" class="news-list__item">
+      <li  v-for="article in articles" class="news-list__item">
         <a :href="article.url" target="_blank" class="news-list__link-title">
           <h2 v-text="article.title" class="news-list__title"></h2>
         </a>

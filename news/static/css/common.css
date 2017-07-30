@@ -15,7 +15,8 @@ ul {
 
 .container {
   margin: 0 auto;
-  max-width: 1440px; }
+  max-width: 1200px;
+  padding: 0 16px; }
 
 .project-type__img {
   animation: flip 10000ms infinite;
@@ -41,7 +42,7 @@ ul {
   background: #f7f7f7;
   border-radius: 8px;
   color: transparent;
-  height: 300px;
+  height: 100vh;
   position: relative;
   width: 100%; }
   .vue-app-preload:before {
@@ -71,3 +72,7 @@ ul {
     transform: rotate(10deg); }
   to {
     transform: rotate(360deg); } }
+
+.no-scroll {
+  height: 100vh;
+  overflow: hidden; }
