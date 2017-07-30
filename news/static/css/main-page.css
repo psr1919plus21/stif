@@ -13,14 +13,14 @@
     display: flex;
     justify-content: space-between; }
   .header__add {
-    background: url("news/static/img/add.svg") no-repeat center;
+    background: url("/news/news/static/img/add.svg") no-repeat center;
     background-size: contain;
     cursor: pointer;
     height: 16px;
     margin-top: 8px;
     width: 16px; }
     .header__add:hover {
-      background: url("news/static/img/add__active.svg") no-repeat center; }
+      background: url("/news/news/static/img/add__active.svg") no-repeat center; }
 
 .header-chanels {
   display: flex;
@@ -70,23 +70,23 @@
     padding: 10px;
     width: 80%; }
   .chanels-control__remove {
-    background: url("news/static/img/remove.svg") no-repeat center;
+    background: url("/news/news/static/img/remove.svg") no-repeat center;
     background-size: contain;
     cursor: pointer;
     height: 16px;
     margin-top: 8px;
     width: 16px; }
     .chanels-control__remove:hover {
-      background: url("news/static/img/remove__active.svg") no-repeat center; }
+      background: url("/news/news/static/img/remove__active.svg") no-repeat center; }
   .chanels-control__add {
-    background: url("news/static/img/add.svg") no-repeat center;
+    background: url("/news/news/static/img/add.svg") no-repeat center;
     background-size: contain;
     cursor: pointer;
     height: 16px;
     margin-top: 8px;
     width: 16px; }
     .chanels-control__add:hover {
-      background: url("news/static/img/add__active.svg") no-repeat center; }
+      background: url("/news/news/static/img/add__active.svg") no-repeat center; }
 
 .chanels-list {
   align-content: flex-start;
