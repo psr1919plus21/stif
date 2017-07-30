@@ -22,9 +22,20 @@ let template = `
             </div>
           </div>
         </li>
-        <li v-for="chanel in baseChanels" class="header-chanels__item">
+        <li v-for="chanel in chanels" class="header-chanels__item">
           <button @click="showChanel($event, chanel.key)" class="header-chanels__button">{{chanel.name}}</button>
         </li>
+
+        <li v-if="chanelsOverflow" class="header-chanels__item header-chanels__item_hidden-chanels">
+          <button @click="toggleHiddenChanels" class="header-chanels__button">...</button>
+
+          <ul v-show="hidenChanelsActive" class="hiden-channels">
+            <li v-for="chanel in hiddenChanels" class="hiden-channels__item">
+              <button @click="showChanel($event, chanel.key)" class="header-chanels__button">{{chanel.name}}</button>
+            </li>
+          </ul>
+        </li>
+
       </ul>
     </div>
   </header>

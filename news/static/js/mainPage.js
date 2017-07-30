@@ -1576,7 +1576,7 @@ module.exports = plugin;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var template = "\n  <header class=\"header\">\n    <div class=\"container\">\n      <h1 class=\"header__title\">News</h1>\n\n      <ul class=\"header-chanels\">\n        <li class=\"header-chanels__item\">\n          <div @click=\"showChanelsControl\" class=\"header__add\"></div>\n          <div v-show=\"openControl\" class=\"chanels-control\">\n            <div class=\"chanels-control__content\">\n              <input v-model=\"search\" ref='search' class=\"chanels-control__search\" type=\"text\" placeholder=\"search\">\n              <ul class=\"chanels-list\">\n                <li v-for=\"source in localSources\" @click=\"toggleChanel(source.id)\" class=\"chanels-list__item\">\n                  <h3 v-text=\"source.name\" class=\"chanels-list__title\"></h3>\n                  <p v-text=\"source.category\" class=\"chanels-list__category\"></p>\n                  <div v-if=\"inBasicChanels(source.id)\"\n                    class=\"chanels-control__remove\"></div>\n                  <div v-else\n                    class=\"chanels-control__add\"></div>\n                </li>\n              </ul>\n            </div>\n          </div>\n        </li>\n        <li v-for=\"chanel in baseChanels\" class=\"header-chanels__item\">\n          <button @click=\"showChanel($event, chanel.key)\" class=\"header-chanels__button\">{{chanel.name}}</button>\n        </li>\n      </ul>\n    </div>\n  </header>\n";
+var template = "\n  <header class=\"header\">\n    <div class=\"container\">\n      <h1 class=\"header__title\">News</h1>\n\n      <ul class=\"header-chanels\">\n        <li class=\"header-chanels__item\">\n          <div @click=\"showChanelsControl\" class=\"header__add\"></div>\n          <div v-show=\"openControl\" class=\"chanels-control\">\n            <div class=\"chanels-control__content\">\n              <input v-model=\"search\" ref='search' class=\"chanels-control__search\" type=\"text\" placeholder=\"search\">\n              <ul class=\"chanels-list\">\n                <li v-for=\"source in localSources\" @click=\"toggleChanel(source.id)\" class=\"chanels-list__item\">\n                  <h3 v-text=\"source.name\" class=\"chanels-list__title\"></h3>\n                  <p v-text=\"source.category\" class=\"chanels-list__category\"></p>\n                  <div v-if=\"inBasicChanels(source.id)\"\n                    class=\"chanels-control__remove\"></div>\n                  <div v-else\n                    class=\"chanels-control__add\"></div>\n                </li>\n              </ul>\n            </div>\n          </div>\n        </li>\n        <li v-for=\"chanel in chanels\" class=\"header-chanels__item\">\n          <button @click=\"showChanel($event, chanel.key)\" class=\"header-chanels__button\">{{chanel.name}}</button>\n        </li>\n\n        <li v-if=\"chanelsOverflow\" class=\"header-chanels__item header-chanels__item_hidden-chanels\">\n          <button @click=\"toggleHiddenChanels\" class=\"header-chanels__button\">...</button>\n\n          <ul v-show=\"hidenChanelsActive\" class=\"hiden-channels\">\n            <li v-for=\"chanel in hiddenChanels\" class=\"hiden-channels__item\">\n              <button @click=\"showChanel($event, chanel.key)\" class=\"header-chanels__button\">{{chanel.name}}</button>\n            </li>\n          </ul>\n        </li>\n\n      </ul>\n    </div>\n  </header>\n";
 
 exports.default = template;
 
@@ -1612,6 +1612,13 @@ var baseChanels = [{
 
 baseChanels = JSON.parse(localStorage.getItem('baseChanels')) || baseChanels;
 
+function toggleMaxChanelsByMedia() {
+  var maxChanels = void 0;
+  var _matchMediaObject = window.matchMedia("(max-width: 414px)");
+  maxChanels = _matchMediaObject.matches ? 0 : 3;
+  return maxChanels;
+}
+
 Vue.component('header-cmp', {
   template: _headerTpl2.default,
   data: function data() {
@@ -1619,13 +1626,19 @@ Vue.component('header-cmp', {
       sources: [],
       openControl: false,
       baseChanels: baseChanels,
-      search: ''
+      search: '',
+      chanelsOverflow: false,
+      hidenChanelsActive: false,
+      maxChanelsInNav: 3
     };
   },
   methods: {
     showChanel: function showChanel($event, chanel) {
       _mediator2.default.$emit('chanelSelected', chanel);
-      document.querySelector('.header-chanels__button_active').classList.remove('header-chanels__button_active');
+      var activeChanel = document.querySelector('.header-chanels__button_active');
+      if (activeChanel) {
+        activeChanel.classList.remove('header-chanels__button_active');
+      }
       $event.target.classList.add('header-chanels__button_active');
     },
     showChanelsControl: function showChanelsControl() {
@@ -1654,7 +1667,7 @@ Vue.component('header-cmp', {
         key: chanel,
         name: chanel
       };
-      this.baseChanels.push(newChanel);
+      this.baseChanels.unshift(newChanel);
     },
     removeChanel: function removeChanel(chanel) {
       var _this = this;
@@ -1665,6 +1678,9 @@ Vue.component('header-cmp', {
           return true;
         }
       });
+    },
+    toggleHiddenChanels: function toggleHiddenChanels() {
+      this.hidenChanelsActive = !this.hidenChanelsActive;
     }
   },
   watch: {
@@ -1684,6 +1700,16 @@ Vue.component('header-cmp', {
           return name.indexOf(search) !== -1 || category.indexOf(search) !== -1;
         });
       }
+    },
+    chanels: function chanels() {
+      var chanelsCount = this.baseChanels.length;
+      console.log(this.maxChanelsInNav);
+      this.chanelsOverflow = chanelsCount > this.maxChanelsInNav;
+      return this.baseChanels.slice(0, this.maxChanelsInNav);
+    },
+    hiddenChanels: function hiddenChanels() {
+
+      return this.baseChanels.slice(this.maxChanelsInNav);
     }
   },
   mounted: function mounted() {
@@ -1695,6 +1721,8 @@ Vue.component('header-cmp', {
 
     _mediator2.default.$emit('showFirstChanel', this.baseChanels[0].key);
     document.querySelector('.header-chanels__button').classList.add('header-chanels__button_active');
+
+    this.maxChanelsInNav = toggleMaxChanelsByMedia();
   }
 });
 

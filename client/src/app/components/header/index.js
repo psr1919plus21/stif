@@ -18,6 +18,13 @@ let baseChanels = [{
 
 baseChanels = JSON.parse(localStorage.getItem('baseChanels')) || baseChanels;
 
+function toggleMaxChanelsByMedia() {
+  let maxChanels;
+  let _matchMediaObject = window.matchMedia("(max-width: 414px)");
+  maxChanels = _matchMediaObject.matches ? 0 : 3;
+  return maxChanels;
+}
+
 Vue.component('header-cmp', {
   template: template,
   data: function() {
@@ -25,14 +32,19 @@ Vue.component('header-cmp', {
       sources: [],
       openControl: false,
       baseChanels: baseChanels,
-      search: ''
+      search: '',
+      chanelsOverflow: false,
+      hidenChanelsActive: false,
+      maxChanelsInNav: 3
     }
   },
   methods: {
     showChanel: function($event, chanel) {
       mediator.$emit('chanelSelected', chanel);
-      document.querySelector('.header-chanels__button_active')
-        .classList.remove('header-chanels__button_active');
+      let activeChanel = document.querySelector('.header-chanels__button_active');
+      if (activeChanel) {
+        activeChanel.classList.remove('header-chanels__button_active');
+      }
       $event.target.classList.add('header-chanels__button_active');
     },
     showChanelsControl: function() {
@@ -62,7 +74,7 @@ Vue.component('header-cmp', {
         key: chanel,
         name: chanel
       }
-      this.baseChanels.push(newChanel);
+      this.baseChanels.unshift(newChanel);
     },
     removeChanel: function(chanel) {
       this.baseChanels.some((baseChanel, index) => {
@@ -71,6 +83,9 @@ Vue.component('header-cmp', {
           return true;
         }
       });
+    },
+    toggleHiddenChanels: function() {
+      this.hidenChanelsActive = !this.hidenChanelsActive;
     }
   },
   watch: {
@@ -90,6 +105,16 @@ Vue.component('header-cmp', {
           return name.indexOf(search) !== -1 || category.indexOf(search) !== -1;
         });
       }
+    },
+    chanels: function() {
+      let chanelsCount = this.baseChanels.length;
+      console.log(this.maxChanelsInNav);
+      this.chanelsOverflow = chanelsCount > this.maxChanelsInNav;
+      return this.baseChanels.slice(0, this.maxChanelsInNav);
+    },
+    hiddenChanels: function() {
+
+      return this.baseChanels.slice(this.maxChanelsInNav);
     }
   },
   mounted: function() {
@@ -100,5 +125,7 @@ Vue.component('header-cmp', {
     mediator.$emit('showFirstChanel', this.baseChanels[0].key);
     document.querySelector('.header-chanels__button')
       .classList.add('header-chanels__button_active');
+
+    this.maxChanelsInNav = toggleMaxChanelsByMedia();
   }
 })
