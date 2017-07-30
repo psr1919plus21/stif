@@ -20,7 +20,7 @@ $color-chanel-hover: #fff8ff;;
   }
 
   &__add {
-    background: url('/news/static/img/add.svg') no-repeat center;
+    background: url('news/static/img/add.svg') no-repeat center;
     background-size: contain;
     cursor: pointer;
     height: 16px;
@@ -28,7 +28,7 @@ $color-chanel-hover: #fff8ff;;
     width: 16px;
 
     &:hover {
-      background: url('/news/static/img/add__active.svg') no-repeat center;
+      background: url('news/static/img/add__active.svg') no-repeat center;
     }
   }
 
@@ -98,7 +98,7 @@ $color-chanel-hover: #fff8ff;;
   }
 
   &__remove {
-    background: url('/news/static/img/remove.svg') no-repeat center;
+    background: url('news/static/img/remove.svg') no-repeat center;
     background-size: contain;
     cursor: pointer;
     height: 16px;
@@ -106,12 +106,12 @@ $color-chanel-hover: #fff8ff;;
     width: 16px;
 
     &:hover {
-      background: url('/news/static/img/remove__active.svg') no-repeat center;
+      background: url('news/static/img/remove__active.svg') no-repeat center;
     }
   }
 
   &__add {
-    background: url('/news/static/img/add.svg') no-repeat center;
+    background: url('news/static/img/add.svg') no-repeat center;
     background-size: contain;
     cursor: pointer;
     height: 16px;
@@ -119,7 +119,7 @@ $color-chanel-hover: #fff8ff;;
     width: 16px;
 
     &:hover {
-      background: url('/news/static/img/add__active.svg') no-repeat center;
+      background: url('news/static/img/add__active.svg') no-repeat center;
     }
   }
 }
