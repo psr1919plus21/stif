@@ -1597,8 +1597,9 @@ var _headerTpl2 = _interopRequireDefault(_headerTpl);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var body = document.querySelector('body'); /* global Vue */
+var html = document.querySelector('html'); /* global Vue */
 
+var body = document.querySelector('body');
 var baseChanels = [{
   key: 'google-news',
   name: 'google'
@@ -1644,6 +1645,7 @@ Vue.component('header-cmp', {
     showChanelsControl: function showChanelsControl() {
       var vm = this;
       this.openControl = !this.openControl;
+      html.classList.toggle('no-scroll');
       body.classList.toggle('no-scroll');
       setTimeout(function () {
         vm.$refs.search.focus();

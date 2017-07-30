@@ -4,6 +4,7 @@ import mediator from '../../services/mediator';
 import api from '../../services/api';
 import template from './headerTpl';
 
+const html = document.querySelector('html');
 const body = document.querySelector('body');
 let baseChanels = [{
   key: 'google-news',
@@ -50,6 +51,7 @@ Vue.component('header-cmp', {
     showChanelsControl: function() {
       let vm = this;
       this.openControl = !this.openControl;
+      html.classList.toggle('no-scroll');
       body.classList.toggle('no-scroll');
       setTimeout(function() {
         vm.$refs.search.focus();
