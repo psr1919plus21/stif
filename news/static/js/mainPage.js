@@ -1663,6 +1663,8 @@ Vue.component('header-cmp', {
     _api2.default.getSources().then(function (data) {
       _this2.sources = data.body.sources;
     });
+
+    _mediator2.default.$emit('showFirstChanel', this.baseChanels[0].key);
   }
 });
 
@@ -1704,12 +1706,10 @@ Vue.component('news-feed', {
         _this.articles = data.body.articles;
       });
     });
-  },
-  mounted: function mounted() {
-    var _this2 = this;
-
-    _api2.default.getNews('google-news').then(function (data) {
-      _this2.articles = data.body.articles;
+    _mediator2.default.$on('showFirstChanel', function (chanel) {
+      _api2.default.getNews(chanel).then(function (data) {
+        _this.articles = data.body.articles;
+      });
     });
   }
 });

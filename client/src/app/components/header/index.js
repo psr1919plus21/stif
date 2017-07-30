@@ -65,5 +65,7 @@ Vue.component('header-cmp', {
     api.getSources().then((data) => {
       this.sources = data.body.sources;
     });
+
+    mediator.$emit('showFirstChanel', this.baseChanels[0].key);
   }
 })

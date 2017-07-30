@@ -24,10 +24,10 @@ Vue.component('news-feed', {
         this.articles = data.body.articles;
       });
     });
-  },
-  mounted: function() {
-    api.getNews('google-news').then((data) => {
-      this.articles = data.body.articles;
+    mediator.$on('showFirstChanel', (chanel) => {
+      api.getNews(chanel).then((data) => {
+        this.articles = data.body.articles;
+      });
     });
   }
 })
