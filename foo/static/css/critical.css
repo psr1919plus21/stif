@@ -1,0 +1,8 @@
+body {
+  font-family: sans-serif; }
+
+.critical-class {
+  color: #f00; }
+
+.cat {
+  transition: border-radius 1s ease-in-out; }

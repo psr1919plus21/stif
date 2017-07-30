@@ -1,5 +1,5 @@
 /* global Vue */
-import './components/MyComponent';
+import './components/newsFeed';
 
 new Vue({
   el: '#app',

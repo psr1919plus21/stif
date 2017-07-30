@@ -1,0 +1,16 @@
+.news {
+  margin: 0 auto;
+  max-width: 800px; }
+
+.news-list {
+  list-style: none; }
+  .news-list__item {
+    border-bottom: 1px solid #c7c7c7;
+    margin-bottom: 42px;
+    padding-bottom: 21px; }
+  .news-list__img {
+    width: 100%; }
+
+.project-type__title {
+  margin-bottom: 28px;
+  margin-top: 54px; }

@@ -1,0 +1,28 @@
+$border-color: #c7c7c7;
+
+.news {
+  margin: 0 auto;
+  max-width: 800px;
+}
+
+.news-list {
+  list-style: none;
+
+  &__item {
+    border-bottom: 1px solid $border-color;
+    margin-bottom: 42px;
+    padding-bottom: 21px;
+  }
+  &__title {
+
+  }
+  &__link {
+
+  }
+  &__img {
+    width: 100%;
+  }
+  &__description {
+
+  }
+}

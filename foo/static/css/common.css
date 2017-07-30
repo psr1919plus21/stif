@@ -1,0 +1,57 @@
+body {
+  background: #c7c7c7; }
+
+.project-type__img {
+  animation: flip 10000ms infinite;
+  min-height: 400px; }
+
+@-webkit-keyframes flip {
+  0% {
+    transform: scaleX(1); }
+  90% {
+    transform: scaleX(1); }
+  100% {
+    transform: scaleX(-1); } }
+
+@keyframes flip {
+  0% {
+    transform: scaleX(1); }
+  90% {
+    transform: scaleX(1); }
+  100% {
+    transform: scaleX(-1); } }
+
+.vue-app-preload {
+  background: #f7f7f7;
+  border-radius: 8px;
+  color: transparent;
+  height: 300px;
+  position: relative;
+  width: 100%; }
+  .vue-app-preload:before {
+    animation: preloader 1000ms infinite;
+    border: 6px solid #333;
+    border-radius: 50%;
+    border-right-color: #999;
+    border-top-color: #999;
+    bottom: 0;
+    content: '';
+    height: 30px;
+    left: 0;
+    margin: auto;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 30px; }
+
+@-webkit-keyframes preloader {
+  from {
+    transform: rotate(10deg); }
+  to {
+    transform: rotate(360deg); } }
+
+@keyframes preloader {
+  from {
+    transform: rotate(10deg); }
+  to {
+    transform: rotate(360deg); } }

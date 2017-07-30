@@ -5,10 +5,6 @@ $color-preloader-bg: #f7f7f7;
 $color-preloader-border: #333;
 $color-preloader-gap: #999;
 
-body {
-  background: $body-bg;
-}
-
 .project-type__img {
   animation: flip 10000ms infinite;
   min-height: 400px;
