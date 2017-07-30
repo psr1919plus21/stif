@@ -1680,7 +1680,8 @@ Vue.component('header-cmp', {
         var search = this.search.toLowerCase();
         return this.sources.filter(function (source) {
           var name = source.name.toLowerCase();
-          return name.indexOf(search) !== -1;
+          var category = source.category.toLowerCase();
+          return name.indexOf(search) !== -1 || category.indexOf(search) !== -1;
         });
       }
     }

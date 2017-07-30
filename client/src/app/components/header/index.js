@@ -86,7 +86,8 @@ Vue.component('header-cmp', {
         let search = this.search.toLowerCase();
         return this.sources.filter((source) => {
           let name = source.name.toLowerCase();
-          return name.indexOf(search) !== -1;
+          let category = source.category.toLowerCase();
+          return name.indexOf(search) !== -1 || category.indexOf(search) !== -1;
         });
       }
     }
