@@ -1,0 +1,27 @@
+.header {
+  background: $color-white;
+  border-bottom: 1px solid $border-color;
+  box-shadow: 0 1px 8px 0 #ebebeb;
+  left: 0;
+  // min-height: $header-height;
+  position: fixed;
+  right: 0;
+  top: 0;
+
+  &__title {
+    font-size: 22px;
+  }
+
+  .container {
+    display: flex;
+    justify-content: space-between;
+  }
+
+}
+
+
+.header-chanels {
+  display: flex;
+  justify-content: space-between;
+  min-width: 200px;
+}

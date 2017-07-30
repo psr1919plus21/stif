@@ -1571,7 +1571,69 @@ if (typeof window !== 'undefined' && window.Vue) {
 module.exports = plugin;
 
 },{"got":1}],3:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var template = "\n  <header class=\"header\">\n    <div class=\"container\">\n      <h1 class=\"header__title\">News</h1>\n\n      <ul class=\"header-chanels\">\n        <li v-for=\"chanel in baseChanels\" class=\"header-chanels__item\">\n          <button @click=\"showChanel(chanel.key)\" class=\"header-chanels__button\">{{chanel.name}}</button>\n        </li>\n      </ul>\n    </div>\n  </header>\n";
+
+exports.default = template;
+
+},{}],4:[function(require,module,exports){
 'use strict';
+
+var _mediator = require('../../services/mediator');
+
+var _mediator2 = _interopRequireDefault(_mediator);
+
+var _api = require('../../services/api');
+
+var _api2 = _interopRequireDefault(_api);
+
+var _headerTpl = require('./headerTpl');
+
+var _headerTpl2 = _interopRequireDefault(_headerTpl);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+Vue.component('header-cmp', {
+  template: _headerTpl2.default,
+  data: function data() {
+    return {
+      sources: [],
+      baseChanels: [{
+        key: 'google',
+        name: 'google'
+      }, {
+        key: 'bbc',
+        name: 'bbc'
+      }, {
+        key: 'cnn',
+        name: 'cnn'
+      }]
+    };
+  },
+  methods: {
+    showChanel: function showChanel(chanel) {
+      _mediator2.default.$emit('chanelSelected', chanel);
+    }
+  },
+  mounted: function mounted() {
+    var _this = this;
+
+    _api2.default.getSources().then(function (data) {
+      _this.sources = data.body.sources;
+    });
+  }
+}); /* global Vue */
+
+},{"../../services/api":8,"../../services/mediator":9,"./headerTpl":3}],5:[function(require,module,exports){
+'use strict';
+
+var _mediator = require('../../services/mediator');
+
+var _mediator2 = _interopRequireDefault(_mediator);
 
 var _api = require('../../services/api');
 
@@ -1582,8 +1644,6 @@ var _newsFeedTpl = require('./newsFeedTpl');
 var _newsFeedTpl2 = _interopRequireDefault(_newsFeedTpl);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/* global Vue */
 
 Vue.component('news-feed', {
   template: _newsFeedTpl2.default,
@@ -1599,30 +1659,42 @@ Vue.component('news-feed', {
       });
     }
   },
-  mounted: function mounted() {
+  created: function created() {
     var _this = this;
 
-    _api2.default.getNews().then(function (data) {
-      _this.articles = data.body.articles;
+    _mediator2.default.$on('chanelSelected', function (chanel) {
+      _api2.default.getNews(chanel).then(function (data) {
+        _this.articles = data.body.articles;
+      });
+    });
+  },
+  mounted: function mounted() {
+    var _this2 = this;
+
+    _api2.default.getNews('google').then(function (data) {
+      _this2.articles = data.body.articles;
     });
   }
-});
+}); /* global Vue */
 
-},{"../../services/api":6,"./newsFeedTpl":4}],4:[function(require,module,exports){
+},{"../../services/api":8,"../../services/mediator":9,"./newsFeedTpl":6}],6:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var template = "\n  <div class=\"news\">\n    <button @click=\"loadNews\">Load news</button>\n    <ul class=\"news-list\">\n      <li v-for=\"article in articles\" class=\"news-list__item\">\n        <h2 v-text=\"article.title\" class=\"news-list__title\"></h2>\n        <a :href=\"article.url\" terget=\"_blank\" class=\"news-list__link\">\n          <img :src=\"article.urlToImage\" class=\"news-list__img\">\n        </a>\n        <p v-text=\"article.description\" class=\"news-list__description\"></p>\n      </li>\n    </ul>\n  </div>\n";
+var template = "\n  <div class=\"news\">\n    <ul class=\"news-list\">\n      <li v-for=\"article in articles\" class=\"news-list__item\">\n        <a :href=\"article.url\" target=\"_blank\" class=\"news-list__link-title\">\n          <h2 v-text=\"article.title\" class=\"news-list__title\"></h2>\n        </a>\n        <a :href=\"article.url\" target=\"_blank\" class=\"news-list__link\">\n          <img :src=\"article.urlToImage\" class=\"news-list__img\">\n        </a>\n        <p v-text=\"article.description\" class=\"news-list__description\"></p>\n      </li>\n    </ul>\n  </div>\n";
 
 exports.default = template;
 
-},{}],5:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 'use strict';
 
 require('./components/newsFeed');
 
+require('./components/header');
+
+/* global Vue */
 new Vue({
   el: '#app',
   data: {
@@ -1631,9 +1703,9 @@ new Vue({
   mounted: function mounted() {
     this.$el.classList.remove('vue-app-preload');
   }
-}); /* global Vue */
+});
 
-},{"./components/newsFeed":3}],6:[function(require,module,exports){
+},{"./components/header":4,"./components/newsFeed":5}],8:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1650,7 +1722,9 @@ Vue.use(_vueResource2.default); /* global Vue */
 
 var API_KEY = '956918925cff4bbf971eb06f42e34b20';
 var urls = {
-  allNews: 'https://newsapi.org/v1/articles?source=google-news&apiKey=' + API_KEY,
+  google: 'https://newsapi.org/v1/articles?source=google-news&apiKey=' + API_KEY,
+  bbc: 'https://newsapi.org/v1/articles?source=bbc-news&apiKey=' + API_KEY,
+  cnn: 'https://newsapi.org/v1/articles?source=cnn&apiKey=' + API_KEY,
   sources: 'https://newsapi.org/v1/sources?language=en'
 };
 
@@ -1658,8 +1732,9 @@ var api = {
   getSources: function getSources() {
     return Vue.http.get(urls.sources);
   },
-  getNews: function getNews() {
-    return Vue.http.get(urls.allNews);
+  getNews: function getNews(chanel) {
+    console.log('get ', chanel);
+    return Vue.http.get(urls[chanel]);
   }
 };
 
@@ -1674,4 +1749,16 @@ var api = {
 
 exports.default = api;
 
-},{"vue-resource":2}]},{},[5]);
+},{"vue-resource":2}],9:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+/* global Vue */
+
+var mediator = new Vue();
+
+exports.default = mediator;
+
+},{}]},{},[7]);
