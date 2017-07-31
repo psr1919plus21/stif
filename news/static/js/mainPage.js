@@ -1636,6 +1636,7 @@ Vue.component('header-cmp', {
   methods: {
     showChanel: function showChanel($event, chanel) {
       _mediator2.default.$emit('chanelSelected', chanel);
+      this.hidenChanelsActive = false;
       var activeChanel = document.querySelector('.header-chanels__button_active');
       if (activeChanel) {
         activeChanel.classList.remove('header-chanels__button_active');
@@ -1751,7 +1752,8 @@ Vue.component('news-feed', {
   template: _newsFeedTpl2.default,
   data: function data() {
     return {
-      articles: []
+      articles: [],
+      activeChanel: ''
     };
   },
   methods: {},
@@ -1764,11 +1766,13 @@ Vue.component('news-feed', {
       _api2.default.getNews(chanel).then(function (data) {
         body.classList.remove('vue-app-preload');
         _this.articles = data.body.articles;
+        _this.activeChanel = chanel;
       });
     });
     _mediator2.default.$on('showFirstChanel', function (chanel) {
       _api2.default.getNews(chanel).then(function (data) {
         _this.articles = data.body.articles;
+        _this.activeChanel = chanel;
       });
     });
   }
@@ -1780,7 +1784,7 @@ Vue.component('news-feed', {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var template = "\n  <div class=\"news\">\n    <ul class=\"news-list\">\n      <li  v-for=\"article in articles\" class=\"news-list__item\">\n        <a :href=\"article.url\" target=\"_blank\" class=\"news-list__link-title\">\n          <h2 v-text=\"article.title\" class=\"news-list__title\"></h2>\n        </a>\n        <a :href=\"article.url\" target=\"_blank\" class=\"news-list__link\">\n          <img :src=\"article.urlToImage\" class=\"news-list__img\">\n        </a>\n        <p v-text=\"article.description\" class=\"news-list__description\"></p>\n      </li>\n    </ul>\n  </div>\n";
+var template = "\n  <div class=\"news\">\n    <h2 v-text=\"activeChanel\" class=\"news__title\"></h2>\n    <ul class=\"news-list\">\n      <li  v-for=\"article in articles\" class=\"news-list__item\">\n        <a :href=\"article.url\" target=\"_blank\" class=\"news-list__link-title\">\n          <h2 v-text=\"article.title\" class=\"news-list__title\"></h2>\n        </a>\n        <a :href=\"article.url\" target=\"_blank\" class=\"news-list__link\">\n          <img :src=\"article.urlToImage\" class=\"news-list__img\">\n        </a>\n        <p v-text=\"article.description\" class=\"news-list__description\"></p>\n      </li>\n    </ul>\n  </div>\n";
 
 exports.default = template;
 

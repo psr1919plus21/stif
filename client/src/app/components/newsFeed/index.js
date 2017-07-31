@@ -10,7 +10,8 @@ Vue.component('news-feed', {
   template: template,
   data: function() {
     return {
-      articles: []
+      articles: [],
+      activeChanel: ''
     }
   },
   methods: {
@@ -22,11 +23,13 @@ Vue.component('news-feed', {
       api.getNews(chanel).then((data) => {
         body.classList.remove('vue-app-preload');
         this.articles = data.body.articles;
+        this.activeChanel = chanel;
       });
     });
     mediator.$on('showFirstChanel', (chanel) => {
       api.getNews(chanel).then((data) => {
         this.articles = data.body.articles;
+        this.activeChanel = chanel;
       });
     });
   }

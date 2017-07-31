@@ -1,5 +1,6 @@
 let template = `
   <div class="news">
+    <h2 v-text="activeChanel" class="news__title"></h2>
     <ul class="news-list">
       <li  v-for="article in articles" class="news-list__item">
         <a :href="article.url" target="_blank" class="news-list__link-title">
