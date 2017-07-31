@@ -46,17 +46,17 @@ $color-chanel-hover: #fff8ff;;
     }
   }
 
-  &__item_hidden-chanels {
-    position: relative;
-  }
-
   &__button {
     @include noselect();
     -webkit-apperance: none;
     background: $color-white;
     border: 1px solid $border-color;
-    border-radius: 4px;
+    border-radius: 2px;
     cursor: pointer;
+    font-size: 10px;
+    letter-spacing: 1px;
+    line-height: 14px;
+    text-transform: uppercase;
 
     &:hover {
       background: $color-light-blue;
@@ -143,7 +143,7 @@ $color-chanel-hover: #fff8ff;;
   align-content: flex-start;
   display: flex;
   flex-wrap: wrap;
-  height: calc(90vh - 32px);
+  height: calc(90vh - 90px);
   justify-content: space-between;
   overflow-y: auto;
   padding: 16px;
@@ -178,12 +178,15 @@ $color-chanel-hover: #fff8ff;;
 .hiden-channels {
   background: $color-white;
   border: 1px solid $border-color;
-  border-radius: 4px;
+  border-radius: 0 0 0 4px;
+  box-sizing: border-box;
+  max-height: calc(100vh - 80px);
+  overflow: auto;
   padding: 16px;
   position: absolute;
   right: 0;
-  top: 34px;
-  width: 200px;
+  top: 35px;
+  width: 232px;
 
   &:before {
     background: $color-white;
@@ -198,5 +201,16 @@ $color-chanel-hover: #fff8ff;;
     top: -5px;
     transform: rotate(45deg);
     width: 8px;
+  }
+
+  @include only-screen('414px') {
+    height: 100vh;
+    max-height: initial;
+    padding-bottom: 200px;
+    width: 100%;
+  }
+
+  &__item {
+    margin-bottom: 4px;
   }
 }

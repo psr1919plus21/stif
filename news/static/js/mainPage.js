@@ -1610,13 +1610,14 @@ var baseChanels = [{
   key: 'cnn',
   name: 'cnn'
 }];
+var isMobile = void 0;
 
 baseChanels = JSON.parse(localStorage.getItem('baseChanels')) || baseChanels;
 
 function toggleMaxChanelsByMedia() {
   var maxChanels = void 0;
-  var _matchMediaObject = window.matchMedia("(max-width: 414px)");
-  maxChanels = _matchMediaObject.matches ? 0 : 3;
+  isMobile = window.matchMedia("(max-width: 414px)").matches;
+  maxChanels = isMobile ? 0 : 3;
   return maxChanels;
 }
 
@@ -1636,7 +1637,9 @@ Vue.component('header-cmp', {
   methods: {
     showChanel: function showChanel($event, chanel) {
       _mediator2.default.$emit('chanelSelected', chanel);
-      this.hidenChanelsActive = false;
+      if (isMobile) {
+        this.hidenChanelsActive = false;
+      }
       var activeChanel = document.querySelector('.header-chanels__button_active');
       if (activeChanel) {
         activeChanel.classList.remove('header-chanels__button_active');
