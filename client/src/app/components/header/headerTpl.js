@@ -6,7 +6,7 @@ let template = `
       <ul class="header-chanels">
         <li class="header-chanels__item">
           <div @click="showChanelsControl" class="header__add"></div>
-          <div v-show="openControl" class="chanels-control">
+          <div v-show="openControl" @click="hideChanelsControlByArea($event)" class="chanels-control">
             <div class="chanels-control__content">
               <input v-model="search" ref='search' class="chanels-control__search" type="text" placeholder="search">
               <ul class="chanels-list">

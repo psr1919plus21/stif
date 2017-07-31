@@ -1576,7 +1576,7 @@ module.exports = plugin;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var template = "\n  <header class=\"header\">\n    <div class=\"container\">\n      <h1 class=\"header__title\">News</h1>\n\n      <ul class=\"header-chanels\">\n        <li class=\"header-chanels__item\">\n          <div @click=\"showChanelsControl\" class=\"header__add\"></div>\n          <div v-show=\"openControl\" class=\"chanels-control\">\n            <div class=\"chanels-control__content\">\n              <input v-model=\"search\" ref='search' class=\"chanels-control__search\" type=\"text\" placeholder=\"search\">\n              <ul class=\"chanels-list\">\n                <li v-for=\"source in localSources\" @click=\"toggleChanel(source.id)\" class=\"chanels-list__item\">\n                  <h3 v-text=\"source.name\" class=\"chanels-list__title\"></h3>\n                  <p v-text=\"source.category\" class=\"chanels-list__category\"></p>\n                  <div v-if=\"inBasicChanels(source.id)\"\n                    class=\"chanels-control__remove\"></div>\n                  <div v-else\n                    class=\"chanels-control__add\"></div>\n                </li>\n              </ul>\n            </div>\n          </div>\n        </li>\n        <li v-for=\"chanel in chanels\" class=\"header-chanels__item\">\n          <button @click=\"showChanel($event, chanel.key)\" class=\"header-chanels__button\">{{chanel.name}}</button>\n        </li>\n\n        <li v-if=\"chanelsOverflow\" class=\"header-chanels__item header-chanels__item_hidden-chanels\">\n          <button @click=\"toggleHiddenChanels\" class=\"header-chanels__button\">...</button>\n\n          <ul v-show=\"hidenChanelsActive\" class=\"hiden-channels\">\n            <li v-for=\"chanel in hiddenChanels\" class=\"hiden-channels__item\">\n              <button @click=\"showChanel($event, chanel.key)\" class=\"header-chanels__button\">{{chanel.name}}</button>\n            </li>\n          </ul>\n        </li>\n\n      </ul>\n    </div>\n  </header>\n";
+var template = "\n  <header class=\"header\">\n    <div class=\"container\">\n      <h1 class=\"header__title\">News</h1>\n\n      <ul class=\"header-chanels\">\n        <li class=\"header-chanels__item\">\n          <div @click=\"showChanelsControl\" class=\"header__add\"></div>\n          <div v-show=\"openControl\" @click=\"hideChanelsControlByArea($event)\" class=\"chanels-control\">\n            <div class=\"chanels-control__content\">\n              <input v-model=\"search\" ref='search' class=\"chanels-control__search\" type=\"text\" placeholder=\"search\">\n              <ul class=\"chanels-list\">\n                <li v-for=\"source in localSources\" @click=\"toggleChanel(source.id)\" class=\"chanels-list__item\">\n                  <h3 v-text=\"source.name\" class=\"chanels-list__title\"></h3>\n                  <p v-text=\"source.category\" class=\"chanels-list__category\"></p>\n                  <div v-if=\"inBasicChanels(source.id)\"\n                    class=\"chanels-control__remove\"></div>\n                  <div v-else\n                    class=\"chanels-control__add\"></div>\n                </li>\n              </ul>\n            </div>\n          </div>\n        </li>\n        <li v-for=\"chanel in chanels\" class=\"header-chanels__item\">\n          <button @click=\"showChanel($event, chanel.key)\" class=\"header-chanels__button\">{{chanel.name}}</button>\n        </li>\n\n        <li v-if=\"chanelsOverflow\" class=\"header-chanels__item header-chanels__item_hidden-chanels\">\n          <button @click=\"toggleHiddenChanels\" class=\"header-chanels__button\">...</button>\n\n          <ul v-show=\"hidenChanelsActive\" class=\"hiden-channels\">\n            <li v-for=\"chanel in hiddenChanels\" class=\"hiden-channels__item\">\n              <button @click=\"showChanel($event, chanel.key)\" class=\"header-chanels__button\">{{chanel.name}}</button>\n            </li>\n          </ul>\n        </li>\n\n      </ul>\n    </div>\n  </header>\n";
 
 exports.default = template;
 
@@ -1652,6 +1652,13 @@ Vue.component('header-cmp', {
         vm.$refs.search.focus();
       }, 0);
     },
+    hideChanelsControlByArea: function hideChanelsControlByArea($event) {
+      if ($event.target.classList.contains('chanels-control')) {
+        this.openControl = false;
+        html.classList.remove('no-scroll');
+        body.classList.remove('no-scroll');
+      }
+    },
     inBasicChanels: function inBasicChanels(chanel) {
       return this.baseChanels.some(function (baseChanel) {
         return baseChanel.key === chanel;
@@ -1706,7 +1713,6 @@ Vue.component('header-cmp', {
     },
     chanels: function chanels() {
       var chanelsCount = this.baseChanels.length;
-      console.log(this.maxChanelsInNav);
       this.chanelsOverflow = chanelsCount > this.maxChanelsInNav;
       return this.baseChanels.slice(0, this.maxChanelsInNav);
     },
@@ -1724,7 +1730,6 @@ Vue.component('header-cmp', {
 
     _mediator2.default.$emit('showFirstChanel', this.baseChanels[0].key);
     document.querySelector('.header-chanels__button').classList.add('header-chanels__button_active');
-
     this.maxChanelsInNav = toggleMaxChanelsByMedia();
   }
 });

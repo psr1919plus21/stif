@@ -57,7 +57,13 @@ Vue.component('header-cmp', {
       setTimeout(function() {
         vm.$refs.search.focus();
       }, 0);
-
+    },
+    hideChanelsControlByArea: function($event) {
+      if ($event.target.classList.contains('chanels-control')) {
+        this.openControl = false;
+        html.classList.remove('no-scroll');
+        body.classList.remove('no-scroll');
+      }
     },
     inBasicChanels: function(chanel) {
       return this.baseChanels.some((baseChanel) => {
@@ -111,7 +117,6 @@ Vue.component('header-cmp', {
     },
     chanels: function() {
       let chanelsCount = this.baseChanels.length;
-      console.log(this.maxChanelsInNav);
       this.chanelsOverflow = chanelsCount > this.maxChanelsInNav;
       return this.baseChanels.slice(0, this.maxChanelsInNav);
     },
@@ -128,7 +133,6 @@ Vue.component('header-cmp', {
     mediator.$emit('showFirstChanel', this.baseChanels[0].key);
     document.querySelector('.header-chanels__button')
       .classList.add('header-chanels__button_active');
-
     this.maxChanelsInNav = toggleMaxChanelsByMedia();
   }
 })
