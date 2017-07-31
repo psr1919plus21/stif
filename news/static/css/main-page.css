@@ -29,6 +29,11 @@
     margin-right: 8px; }
     .header-chanels__item:last-child {
       margin-right: 0; }
+  .header-chanels__item_hidden-chanels {
+    position: relative; }
+    @media only screen and (max-width: 414px) {
+      .header-chanels__item_hidden-chanels {
+        position: initial; } }
   .header-chanels__button {
     user-select: none;
     -webkit-apperance: none;
@@ -137,7 +142,7 @@
   overflow: auto;
   padding: 16px;
   position: absolute;
-  right: 16px;
+  right: 0;
   top: 35px;
   width: 232px; }
   .hiden-channels:before {
